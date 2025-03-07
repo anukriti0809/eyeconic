@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eye Exercise Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: beige;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-text {
+      font-size: 1.5rem;
+      color: #555;
+      margin: 1rem 0;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    canvas {
+      margin-top: 1.5rem;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Eye Exercise Progress Tracker</h1>
+    <div class="progress-text">Progress: <span id="percentage">0</span>%</div>
+    <button id="increaseBtn">Complete Today's Exercise</button>
+    <canvas id="progressChart"></canvas>
+  </div>
+
+  <script>
+    // Initialize data
+    let progressData = [0]; // Start with 0% progress
+    let percentage = 0;
+    const totalDays = 40; // Total days to track
+    const increment = 100 / totalDays; // Increment per day (2.5% per day)
+
+    // Chart configuration
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Array.from({ length: progressData.length }, (_, i) => `Day ${i + 1}`),
+        datasets: [{
+          label: 'Progress (%)',
+          data: progressData,
+          borderColor: '#4CAF50',
+          backgroundColor: 'rgba(76, 175, 80, 0.2)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            grid: {
+              color: '#ddd',
+            },
+            ticks: {
+              color: '#555',
+            }
+          },
+          x: {
+            grid: {
+              color: '#ddd',
+            },
+            ticks: {
+              color: '#555',
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#555',
+            }
+          }
+        }
+      }
+    });
+
+    // Button click event
+    const increaseBtn = document.getElementById('increaseBtn');
+    increaseBtn.addEventListener('click', () => {
+      if (progressData.length < totalDays) {
+        // Increase progress by the fixed increment
+        percentage = Math.min(percentage + increment, 100);
+        progressData.push(percentage);
+
+        // Update chart
+        chart.data.labels.push(`Day ${progressData.length}`);
+        chart.data.datasets[0].data = progressData;
+        chart.update();
+
+        // Update percentage text
+        document.getElementById('percentage').textContent = percentage.toFixed(1);
+
+        // Disable button after 40 clicks
+        if (progressData.length === totalDays) {
+          increaseBtn.disabled = true;
+          increaseBtn.textContent = "Program Completed!";
+          alert("Congratulations! You've completed the 40-day eye exercise program!");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
