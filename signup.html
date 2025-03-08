@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Eye Care Web App - Sign In / Sign Up</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #F5F5DC; /* Beige background to match eye-care theme */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Container for the two panels */
+    .container {
+      background-color: #FFF;
+      width: 900px;
+      min-height: 600px;
+      display: flex;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    /* Left Panel: Eye care image or illustration */
+    .left-panel {
+      flex: 1.2;
+      background-color: #f0ebe1; /* Light, warm background */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .left-panel img {
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 20px;
+    }
+
+    .left-panel h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .left-panel p {
+      color: #666;
+      text-align: center;
+      max-width: 300px;
+      line-height: 1.5;
+    }
+
+    /* Right Panel: Sign In / Sign Up forms */
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    /* Form containers */
+    .form-container {
+      width: 100%;
+      max-width: 300px;
+      transition: all 0.3s ease;
+      /* By default, only the sign-in container is shown (see JS) */
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+    }
+
+    .form-container.active {
+      opacity: 1;
+      visibility: visible;
+      position: relative;
+    }
+
+    .form-container h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-container button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #8B4513; /* Brown accent */
+      color: #FFF;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #6f3510; /* Darker brown on hover */
+    }
+
+    .form-container p {
+      margin-top: 15px;
+      text-align: center;
+      color: #666;
+    }
+
+    .form-container p a {
+      color: #8B4513;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .form-container p a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left Panel with Eye Care Image and Info -->
+    <div class="left-panel">
+      <h2>Eye Care Web App</h2>
+      <p>
+        Take care of your vision with our specialized exercises,<br>
+        tips, and tracking features.
+      </p>
+    </div>
+
+    <!-- Right Panel with Sign In and Sign Up Forms -->
+    <div class="right-panel">
+      <!-- Sign In Form -->
+      <div class="form-container sign-in-container active" id="signInForm">
+        <h1>Sign In</h1>
+        <input type="email" id="signInEmail" placeholder="Email" required />
+        <input type="password" id="signInPassword" placeholder="Password" required />
+        <button type="submit" onclick="signInUser(event)">Sign In</button>
+        <p>
+          Don't have an account?
+          <a href="#" onclick="toggleForms()">Sign Up</a>
+        </p>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div class="form-container sign-up-container" id="signUpForm">
+        <h1>Create Account</h1>
+        <input type="text" id="signUpName" placeholder="Full Name" required />
+        <input type="email" id="signUpEmail" placeholder="Email" required />
+        <input type="password" id="signUpPassword" placeholder="Password" required />
+        <input type="password" id="signUpConfirmPassword" placeholder="Confirm Password" required />
+        <button type="submit" onclick="signUpUser(event)">Sign Up</button>
+        <p>
+          Already have an account?
+          <a href="#" onclick="toggleForms()">Sign In</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple toggle between Sign In and Sign Up forms
+    function toggleForms() {
+      const signInForm = document.getElementById('signInForm');
+      const signUpForm = document.getElementById('signUpForm');
+
+      signInForm.classList.toggle('active');
+      signUpForm.classList.toggle('active');
+    }
+
+    // Handle Sign Up Form Submission
+    async function signUpUser(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('signUpName').value;
+      const email = document.getElementById('signUpEmail').value;
+      const password = document.getElementById('signUpPassword').value;
+      const confirmPassword = document.getElementById('signUpConfirmPassword').value;
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5000/api/users/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password
+          })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('User registered successfully');
+          toggleForms();  // Switch to Sign In form
+        } else {
+          alert(data.message || 'Error signing up');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while signing up.');
+      }
+    }
+
+    // Handle Sign In Form Submission
+    async function signInUser(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('signInEmail').value;
+      const password = document.getElementById('signInPassword').value;
+
+      try {
+        const response = await fetch('http://localhost:5000/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('Login successful');
+          // Store the JWT token (if needed for future requests)
+          localStorage.setItem('authToken', data.token);
+          // Redirect to dashboard or main page
+          window.location.href = '/dashboard';  // Change this URL as needed
+        } else {
+          alert(data.message || 'Error logging in');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while logging in.');
+      }
+    }
+  </script>
+</body>
+</html>

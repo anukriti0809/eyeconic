@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Monitor Settings</title>
+  <link rel="stylesheet" href="bluelight.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Your Monitors</h1>
+    <p>Select a monitor to adjust its settings individually</p>
+
+    <!-- Monitors Section -->
+    <div class="monitors">
+      <div class="monitor selected" id="main-display">
+        <div class="monitor-header">
+          <span>Main Display</span>
+        </div>
+        <div class="preview">
+          <span>PREVIEW</span>
+        </div>
+      </div>
+      <div class="monitor" id="secondary-display">
+        <div class="monitor-header">
+          <span>Secondary Display</span>
+        </div>
+        <div class="preview">
+          <span>PREVIEW</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Color Temperature Slider -->
+    <div class="slider-group">
+      <label for="color-temperature">
+        Color Temperature: 
+        <span id="colorTempValue">60</span>%
+      </label>
+      <input
+        type="range"
+        id="color-temperature"
+        min="0"
+        max="100"
+        value="60"
+      />
+      <div class="slider-labels">
+        <span>Warm</span>
+        <span>Cool</span>
+      </div>
+    </div>
+
+    <!-- Brightness Slider -->
+    <div class="slider-group">
+      <label for="brightness">
+        Brightness: 
+        <span id="brightnessValue">80</span>%
+      </label>
+      <input
+        type="range"
+        id="brightness"
+        min="0"
+        max="100"
+        value="80"
+      />
+      <div class="slider-labels">
+        <span>Dark</span>
+        <span>Bright</span>
+      </div>
+    </div>
+
+    <!-- Preset Modes -->
+    <div class="preset-modes">
+      <h2>Preset Modes</h2>
+      <button id="reading-mode">Reading Mode</button>
+      <button id="movie-mode">Movie Mode</button>
+      <button id="office-mode">Office Mode</button>
+      <button id="health-mode">Health Mode</button>
+
+      <!-- Display the selected mode and its values here -->
+      <p id="selectedMode"></p>
+    </div>
+
+    <!-- About Eye Comfort -->
+    <div class="eye-comfort">
+      <h3>About Eye Comfort</h3>
+      <p>
+        Reducing blue light exposure, especially in the evening, can help
+        ease eye strain and improve sleep quality. Adjust the temperature
+        and brightness based on your environment and your personal
+        preference for optimal eye comfort.
+      </p>
+    </div>
+  </div>
+
+  <script src="bluelight.js"></script>
+</body>
+</html>
