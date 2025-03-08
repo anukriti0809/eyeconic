@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>20-Minute Timer for Eye Health</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #faf3e0; /* Pastel background */
+      margin: 0;
+    }
+    .timer-container {
+      text-align: center;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 24px;
+      color: #6b5b95; /* Pastel purple */
+      margin-bottom: 20px;
+    }
+    #timer {
+      font-size: 48px;
+      font-weight: bold;
+      color: #ff6f61; /* Pastel coral */
+      margin: 20px 0;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background-color: #88d8b0; /* Pastel green */
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #70c7a0; /* Darker pastel green */
+    }
+  </style>
+</head>
+<body>
+  <div class="timer-container">
+    <h1>Your 20 minutes start now for achieving better eye health!</h1>
+    <div id="timer">20:00</div>
+    <button onclick="startTimer()">Start Timer</button>
+  </div>
+
+  <script>
+    let timeLeft = 20 * 60; // 20 minutes in seconds
+    let timerInterval;
+
+    function startTimer() {
+      clearInterval(timerInterval); // Clear any existing timer
+      timeLeft = 20 * 60; // Reset time
+      updateTimerDisplay();
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Time's up! Take a break and relax your eyes. 🎉");
+        }
+      }, 1000); // Update every second
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      document.getElementById("timer").textContent = formattedTime;
+    }
+  </script>
+</body>
+</html>
